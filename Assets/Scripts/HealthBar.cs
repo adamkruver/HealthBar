@@ -11,6 +11,7 @@ public class HealthBar : MonoBehaviour
 
     private Slider _slider; 
     private Coroutine _changeHealthJob;
+    private WaitForFixedUpdate _awaiter = new WaitForFixedUpdate();
 
     private void Awake()
     {
@@ -31,10 +32,10 @@ public class HealthBar : MonoBehaviour
     {
         float normalizedHealth = (float) health / maxHealth;
 
-        ChangeSliderTo(normalizedHealth);
+        ChangeSliderValueTo(normalizedHealth);
     }
 
-    private void ChangeSliderTo(float destination)
+    private void ChangeSliderValueTo(float destination)
     {
         if (_changeHealthJob != null)
             StopCoroutine(_changeHealthJob);
@@ -43,14 +44,12 @@ public class HealthBar : MonoBehaviour
     }
 
     private IEnumerator ChangeSliderValueCoroutine(float destination)
-    {
-        var awaiter = new WaitForFixedUpdate();
-
+    {        
         while (_slider.value != destination)
         {
             _slider.value = Mathf.MoveTowards(_slider.value, destination, Time.fixedDeltaTime * _sliderUpdateTime);
 
-            yield return awaiter;
+            yield return _awaiter;
         }
     }
 }

@@ -26,13 +26,7 @@ public class Player : MonoBehaviour
 
     private void ChangeHealth(int value)
     {
-        _health += value;
-
-        if (_health < 0)
-            _health = 0;
-
-        if (_health > _maxHealth)
-            _health = _maxHealth;
+        _health = Mathf.Clamp(_health + value, 0, _maxHealth);
 
         HealthChanged?.Invoke(_health, _maxHealth);
     }
